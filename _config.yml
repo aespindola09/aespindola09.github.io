@@ -16,8 +16,8 @@
 title: Welcome the BlogCloud
 email: aespindola09@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Blog con todo lo relacionado a la nube ::coffe::
-baseurl: "" # the subpath of your site, e.g. /blog
+  Blog con todo lo relacionado a la nube ::coffee::
+baseurl: /_layouts # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: aespindola09
 github_username:  aespindola09
