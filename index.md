@@ -20,8 +20,7 @@ layout: home
 </style>
 
 <div class="container">
-  <h1>Hola :::Coffee::/h1>
+  <h1>Hola ::Coffee::</h1>
 
-  <p><strong>Page not found :(</strong></p>
-  <p>The requested page could not be found.</p>
+  <p><strong>prueba de pagina :(</strong></p>
 </div>
