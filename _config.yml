@@ -26,7 +26,7 @@ github_username:  aespindola09
 
 # Build settings
 markdown: kramdown
-theme: minima
+theme: slat
 plugins:
   - jekyll-feed
 
