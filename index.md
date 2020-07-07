@@ -22,5 +22,5 @@ layout: home
 <div class="container">
   <h1>Hola ::Coffee::</h1>
 
-  <p><strong>prueba de pagina :(</strong></p>
+  <p><strong>prueba de pagina :)</strong></p>
 </div>
