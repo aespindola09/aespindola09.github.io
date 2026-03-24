@@ -3,384 +3,1277 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Alexis Espindola · FinOps + AI</title>
+<title>AE // Dashboard · FinOps + AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Commit+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root {
-  --bg:#000;--card:#090909;--card2:#0e0e0e;--border:#1a1a1a;--border2:#222;
-  --violet:#7b5fff;--violet-d:#6040ee;
-  --cyan:#00e5ff;--yellow:#ffe600;
-  --text:#f0f0f0;--muted:#555;--muted2:#2e2e2e;
-  --font:'Cabinet Grotesk',sans-serif;--mono:'Commit Mono',monospace;
-  --r:12px;--gap:8px;
+  --bg:        #080c10;
+  --panel:     #0d1117;
+  --panel2:    #111820;
+  --border:    #1c2530;
+  --border2:   #243040;
+  --green:     #00ff88;
+  --green-dim: rgba(0,255,136,0.08);
+  --green-mid: rgba(0,255,136,0.18);
+  --blue:      #3b9eff;
+  --blue-dim:  rgba(59,158,255,0.08);
+  --amber:     #ffb347;
+  --amber-dim: rgba(255,179,71,0.1);
+  --red:       #ff4757;
+  --text:      #c8d8e8;
+  --muted:     #4a6070;
+  --muted2:    #7a90a0;
+  --font:      'JetBrains Mono', monospace;
+  --font-ui:   'Syne', sans-serif;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{font-size:16px}
-body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;padding:18px}
-body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(123,95,255,.012) 3px,rgba(123,95,255,.012) 4px);pointer-events:none;z-index:999}
 
-.bento{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:80px;gap:var(--gap);max-width:1200px;margin:0 auto}
+*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+html { font-size: 14px; }
 
-.cell{background:var(--card);border-radius:var(--r);border:1px solid var(--border);overflow:hidden;position:relative;transition:border-color .2s,transform .2s;opacity:0;transform:translateY(12px);animation:up .4s ease forwards}
-.cell:hover{border-color:var(--border2);transform:translateY(-2px)}
-@keyframes up{to{opacity:1;transform:translateY(0)}}
-.cell:nth-child(1){animation-delay:.04s}.cell:nth-child(2){animation-delay:.08s}.cell:nth-child(3){animation-delay:.11s}.cell:nth-child(4){animation-delay:.14s}.cell:nth-child(5){animation-delay:.17s}.cell:nth-child(6){animation-delay:.20s}.cell:nth-child(7){animation-delay:.23s}.cell:nth-child(8){animation-delay:.26s}.cell:nth-child(9){animation-delay:.29s}.cell:nth-child(10){animation-delay:.32s}.cell:nth-child(11){animation-delay:.35s}.cell:nth-child(12){animation-delay:.38s}.cell:nth-child(13){animation-delay:.41s}.cell:nth-child(14){animation-delay:.44s}.cell:nth-child(15){animation-delay:.47s}
-
-.c-hero   {grid-column:1/6;  grid-row:1/5}
-.c-avail  {grid-column:6/8;  grid-row:1/2}
-.c-years  {grid-column:8/10; grid-row:1/2}
-.c-certs  {grid-column:10/12;grid-row:1/2}
-.c-loc    {grid-column:12/13;grid-row:1/2}
-.c-clouds {grid-column:6/9;  grid-row:2/4}
-.c-proj   {grid-column:9/13; grid-row:2/4}
-.c-stack  {grid-column:6/10; grid-row:4/5}
-.c-contact{grid-column:10/13;grid-row:4/5}
-.c-skills {grid-column:1/5;  grid-row:5/7}
-.c-about  {grid-column:5/9;  grid-row:5/7}
-.c-blog   {grid-column:9/13; grid-row:5/7}
-.c-posts  {grid-column:1/13; grid-row:7/9}
-
-/* HERO */
-.c-hero{padding:32px 28px;display:flex;flex-direction:column;justify-content:space-between}
-.c-hero::before{content:'';position:absolute;top:-80px;right:-80px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(123,95,255,.12) 0%,transparent 70%);pointer-events:none}
-.eyebrow{font-family:var(--mono);font-size:.6rem;color:var(--violet);letter-spacing:.14em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:10px}
-.eyebrow::before{content:'';width:22px;height:1px;background:var(--violet);box-shadow:0 0 6px var(--violet)}
-.hero-name{font-size:clamp(2.4rem,3.8vw,3.4rem);font-weight:900;line-height:.92;letter-spacing:-.03em;color:var(--text);margin-bottom:14px}
-.hero-name .v{color:var(--violet);text-shadow:0 0 22px rgba(123,95,255,.55),0 0 44px rgba(123,95,255,.2)}
-.hero-desc{font-size:.88rem;color:var(--muted);line-height:1.7;max-width:295px}
-.hero-desc strong{color:var(--text);font-weight:600}
-.hero-actions{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
-
-.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--font);font-size:.78rem;font-weight:700;padding:10px 20px;border-radius:6px;text-decoration:none;border:none;cursor:pointer;transition:all .2s;letter-spacing:.02em}
-.btn-v{background:var(--violet);color:#fff;box-shadow:0 0 22px rgba(123,95,255,.35)}
-.btn-v:hover{background:#8d73ff;box-shadow:0 0 32px rgba(123,95,255,.55);transform:translateY(-1px)}
-.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--muted)}
-.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}
-
-/* AVAILABLE */
-.c-avail{background:#000;border-color:rgba(123,95,255,.4);box-shadow:inset 0 0 20px rgba(123,95,255,.05);display:flex;align-items:center;justify-content:center;gap:10px}
-.c-avail:hover{transform:none}
-.avail-dot{width:7px;height:7px;border-radius:50%;background:var(--violet);box-shadow:0 0 10px var(--violet),0 0 20px rgba(123,95,255,.4);animation:blink 1.4s ease-in-out infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-.avail-text{font-family:var(--mono);font-size:.63rem;font-weight:700;color:var(--violet);letter-spacing:.12em;text-transform:uppercase;text-shadow:0 0 10px rgba(123,95,255,.5)}
-
-/* STATS */
-.stat-cell{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:0 20px;background:var(--card2)}
-.stat-num{font-size:2rem;font-weight:900;letter-spacing:-.04em;line-height:1;color:var(--text)}
-.stat-num.c{color:var(--cyan);text-shadow:0 0 16px rgba(0,229,255,.4)}
-.stat-lbl{font-family:var(--mono);font-size:.54rem;color:var(--muted2);letter-spacing:.1em;text-transform:uppercase;margin-top:4px}
-
-/* LOC */
-.c-loc{background:var(--card2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
-.loc-flag{font-size:1.2rem}.loc-text{font-family:var(--mono);font-size:.48rem;color:var(--muted2);letter-spacing:.06em;text-align:center}
-
-/* CLOUDS */
-.c-clouds{padding:18px;background:var(--card2);display:flex;flex-direction:column;justify-content:space-between}
-.cell-label{font-family:var(--mono);font-size:.54rem;color:var(--muted2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px}
-.cloud-items{display:flex;flex-direction:column;gap:9px}
-.cloud-row{display:flex;align-items:center;gap:10px}
-.cloud-icon{width:26px;height:26px;border-radius:6px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
-.cloud-info{flex:1}
-.cloud-name{font-size:.74rem;font-weight:600;color:var(--text);margin-bottom:4px}
-.cloud-bar{height:2px;background:var(--border2);border-radius:1px;overflow:hidden}
-.cloud-fill{height:100%;border-radius:1px;width:0;transition:width 1.4s cubic-bezier(.4,0,.2,1)}
-.fv{background:var(--violet);box-shadow:0 0 5px rgba(123,95,255,.5)}
-.fc{background:var(--cyan);box-shadow:0 0 5px rgba(0,229,255,.4)}
-.fy{background:var(--yellow);box-shadow:0 0 5px rgba(255,230,0,.4)}
-.cloud-pct{font-family:var(--mono);font-size:.54rem;color:var(--muted2);min-width:24px;text-align:right}
-
-/* PROJECT */
-.c-proj{padding:22px 20px;background:var(--card);display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
-.c-proj::after{content:'';position:absolute;bottom:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(0,229,255,.06) 0%,transparent 70%);pointer-events:none}
-.c-proj:hover{border-color:rgba(0,229,255,.18)}
-.proj-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.proj-badge{font-family:var(--mono);font-size:.54rem;color:var(--cyan);letter-spacing:.1em;text-transform:uppercase}
-.proj-status{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.54rem;color:var(--violet);text-shadow:0 0 8px rgba(123,95,255,.4)}
-.proj-status::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--violet);box-shadow:0 0 6px var(--violet)}
-.proj-title{font-size:1.38rem;font-weight:900;letter-spacing:-.02em;line-height:1.05;color:var(--text);margin-bottom:7px}
-.proj-title em{color:var(--cyan);font-style:normal;text-shadow:0 0 12px rgba(0,229,255,.4)}
-.proj-desc{font-size:.74rem;color:var(--muted);line-height:1.6;margin-bottom:12px}
-.proj-tags{display:flex;flex-wrap:wrap;gap:5px}
-.proj-tag{font-family:var(--mono);font-size:.52rem;color:#333;border:1px solid #1c1c1c;padding:3px 7px;border-radius:4px;letter-spacing:.04em;transition:all .15s}
-.c-proj:hover .proj-tag{border-color:rgba(0,229,255,.12);color:#555}
-
-/* STACK */
-.c-stack{padding:0 16px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;background:var(--card2)}
-.stack-label{font-family:var(--mono);font-size:.52rem;color:var(--muted2);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;margin-right:2px}
-.stk{font-family:var(--mono);font-size:.58rem;padding:3px 9px;border-radius:5px;border:1px solid var(--border2);color:#3a3a3a;white-space:nowrap;cursor:default;transition:all .15s}
-.stk:hover{border-color:var(--violet);color:var(--violet);text-shadow:0 0 8px rgba(123,95,255,.4)}
-.stk.hl{border-color:rgba(123,95,255,.28);color:var(--violet);text-shadow:0 0 8px rgba(123,95,255,.3)}
-
-/* CONTACT */
-.c-contact{display:flex;align-items:center;justify-content:center;gap:8px;padding:0 12px;background:var(--card)}
-.contact-link{width:36px;height:36px;border-radius:8px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;color:#3a3a3a;text-decoration:none;font-size:.88rem;transition:all .18s}
-.contact-link:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 12px rgba(0,229,255,.18);transform:translateY(-2px)}
-
-/* SKILLS */
-.c-skills{padding:20px 18px;background:var(--card2)}
-.skill-list{display:flex;flex-direction:column;gap:9px;margin-top:2px}
-.skill-top{display:flex;justify-content:space-between;margin-bottom:4px}
-.skill-name{font-size:.74rem;font-weight:500;color:var(--text)}
-.skill-pct{font-family:var(--mono);font-size:.58rem;color:var(--muted2)}
-.skill-track{height:2px;background:var(--border2);border-radius:1px;overflow:hidden}
-.skill-fill{height:100%;border-radius:1px;width:0;transition:width 1.5s cubic-bezier(.4,0,.2,1)}
-
-/* ABOUT */
-.c-about{padding:20px;background:var(--card);display:flex;flex-direction:column;justify-content:space-between}
-.about-quote{font-size:.96rem;font-weight:700;color:var(--text);line-height:1.45;letter-spacing:-.01em;margin-bottom:9px}
-.about-quote em{color:var(--violet);font-style:normal;text-shadow:0 0 12px rgba(123,95,255,.4)}
-.about-body{font-size:.74rem;color:var(--muted);line-height:1.72}
-.about-facts{display:flex;gap:14px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
-.af-val{font-size:.84rem;font-weight:800;letter-spacing:-.02em}
-.af-lbl{font-family:var(--mono);font-size:.48rem;color:var(--muted2);letter-spacing:.08em;margin-top:2px}
-
-/* MINI BLOG */
-.c-blog{padding:18px 16px;background:var(--card2);display:flex;flex-direction:column;justify-content:space-between}
-.bme{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);cursor:default;transition:padding-left .15s}
-.bme:hover{padding-left:4px}
-.bme:hover .bme-t{color:var(--cyan)}
-.bme:last-child{border-bottom:none}
-.bme-i{font-family:var(--mono);font-size:.5rem;color:var(--muted2);min-width:14px}
-.bme-t{font-size:.7rem;font-weight:500;color:var(--text);line-height:1.35;flex:1;transition:color .15s}
-.bme-a{font-size:.6rem;color:var(--muted2)}
-.blog-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
-.bf-lbl{font-family:var(--mono);font-size:.5rem;color:var(--muted2);letter-spacing:.08em;text-transform:uppercase}
-.bf-all{font-family:var(--mono);font-size:.5rem;color:var(--violet);letter-spacing:.08em;text-transform:uppercase;text-decoration:none;cursor:pointer}
-.bf-all:hover{text-shadow:0 0 8px rgba(123,95,255,.5)}
-
-/* POSTS */
-.c-posts{background:var(--card2);border-color:rgba(123,95,255,.15);padding:24px 26px;height:auto!important;min-height:160px}
-.c-posts:hover{border-color:rgba(123,95,255,.25);transform:none}
-.posts-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border)}
-.posts-title{font-family:var(--mono);font-size:.58rem;color:var(--violet);letter-spacing:.14em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
-.posts-title::before{content:'';width:14px;height:1px;background:var(--violet);box-shadow:0 0 5px var(--violet)}
-.posts-status{font-family:var(--mono);font-size:.54rem;color:var(--muted2);letter-spacing:.08em}
-.posts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.post-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 16px 14px;display:flex;flex-direction:column;gap:8px;transition:border-color .2s,transform .2s;text-decoration:none;cursor:pointer}
-.post-card:hover{border-color:rgba(123,95,255,.3);transform:translateY(-2px)}
-.post-type{font-family:var(--mono);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:4px;display:inline-block;width:fit-content}
-.pt-article{color:var(--violet);background:rgba(123,95,255,.1);border:1px solid rgba(123,95,255,.2)}
-.pt-link   {color:var(--cyan);  background:rgba(0,229,255,.08); border:1px solid rgba(0,229,255,.18)}
-.pt-note   {color:var(--yellow);background:rgba(255,230,0,.07); border:1px solid rgba(255,230,0,.18)}
-.pt-project{color:#a0a0a0;      background:rgba(160,160,160,.07);border:1px solid rgba(160,160,160,.15)}
-.pt-video  {color:#ff6b6b;      background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.18)}
-.post-title{font-size:.86rem;font-weight:700;color:var(--text);line-height:1.3;letter-spacing:-.01em}
-.post-body {font-size:.72rem;color:var(--muted);line-height:1.6;flex:1}
-.post-meta {display:flex;align-items:center;justify-content:space-between;margin-top:4px;padding-top:10px;border-top:1px solid var(--border)}
-.post-date {font-family:var(--mono);font-size:.5rem;color:var(--muted2);letter-spacing:.08em}
-.post-lbl  {font-family:var(--mono);font-size:.5rem;color:var(--violet);letter-spacing:.08em}
-.posts-empty{grid-column:1/-1;border:1px dashed var(--border2);border-radius:10px;padding:28px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
-.pe-icon{font-size:1.4rem;opacity:.3}
-.pe-text{font-family:var(--mono);font-size:.58rem;color:var(--muted2);letter-spacing:.08em;line-height:1.8}
-.pe-code{font-family:var(--mono);font-size:.58rem;color:var(--violet);background:rgba(123,95,255,.08);border:1px solid rgba(123,95,255,.18);padding:5px 12px;border-radius:6px;margin-top:4px}
-
-/* RESPONSIVE */
-@media(max-width:1024px){
-  .bento{grid-template-columns:repeat(6,1fr)}
-  .c-hero{grid-column:1/7;grid-row:1/4}
-  .c-avail{grid-column:1/3;grid-row:4/5}
-  .c-years{grid-column:3/5;grid-row:4/5}
-  .c-certs{grid-column:5/7;grid-row:4/5}
-  .c-loc{display:none}
-  .c-clouds{grid-column:1/4;grid-row:5/7}
-  .c-proj{grid-column:4/7;grid-row:5/7}
-  .c-stack{grid-column:1/5;grid-row:7/8}
-  .c-contact{grid-column:5/7;grid-row:7/8}
-  .c-skills{grid-column:1/4;grid-row:8/10}
-  .c-about{grid-column:4/7;grid-row:8/10}
-  .c-blog{grid-column:1/7;grid-row:10/12}
-  .c-posts{grid-column:1/7;grid-row:12/14}
-  .posts-grid{grid-template-columns:1fr 1fr}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  min-height: 100vh;
+  overflow-x: hidden;
 }
-@media(max-width:640px){
-  body{padding:10px}
-  .bento{grid-template-columns:repeat(2,1fr);grid-auto-rows:70px;gap:7px}
-  .c-hero{grid-column:1/3;grid-row:1/5}
-  .c-avail{grid-column:1/2;grid-row:5/6}
-  .c-years{grid-column:2/3;grid-row:5/6}
-  .c-certs{grid-column:1/2;grid-row:6/7}
-  .c-loc{grid-column:2/3;grid-row:6/7;display:flex}
-  .c-clouds{grid-column:1/3;grid-row:7/9}
-  .c-proj{grid-column:1/3;grid-row:9/11}
-  .c-stack{grid-column:1/3;grid-row:11/12}
-  .c-contact{grid-column:1/3;grid-row:12/13}
-  .c-skills{grid-column:1/3;grid-row:13/15}
-  .c-about{grid-column:1/3;grid-row:15/17}
-  .c-blog{grid-column:1/3;grid-row:17/19}
-  .c-posts{grid-column:1/3;grid-row:19/21}
-  .posts-grid{grid-template-columns:1fr}
-  .hero-name{font-size:2rem}
+
+/* scanline effect */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.04) 2px,
+    rgba(0,0,0,0.04) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 42px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 100;
+  gap: 0;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.tb-logo {
+  font-family: var(--font-ui);
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--green);
+  letter-spacing: 0.06em;
+  padding-right: 20px;
+  border-right: 1px solid var(--border);
+  margin-right: 16px;
+}
+
+.tb-nav {
+  display: flex;
+  gap: 0;
+}
+
+.tb-nav a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 14px;
+  height: 42px;
+  font-size: 0.72rem;
+  color: var(--muted2);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  border-right: 1px solid var(--border);
+  transition: color 0.15s, background 0.15s;
+}
+
+.tb-nav a:hover { color: var(--green); background: var(--green-dim); }
+.tb-nav a.active { color: var(--green); border-bottom: 2px solid var(--green); }
+
+.tb-nav a .icon { font-size: 0.65rem; }
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.tb-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 16px;
+  border-left: 1px solid var(--border);
+  font-size: 0.65rem;
+  color: var(--green);
+  letter-spacing: 0.06em;
+}
+
+.status-led {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+.tb-clock {
+  padding: 0 16px;
+  border-left: 1px solid var(--border);
+  font-size: 0.72rem;
+  color: var(--muted2);
+  letter-spacing: 0.08em;
+  min-width: 90px;
+  text-align: center;
+}
+
+.tb-loc {
+  padding: 0 16px;
+  border-left: 1px solid var(--border);
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+
+/* ── MAIN GRID ── */
+.os-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr 280px;
+  grid-template-rows: auto;
+  gap: 1px;
+  background: var(--border);
+  margin-top: 42px;
+  min-height: calc(100vh - 42px);
+}
+
+/* ── SIDEBAR LEFT ── */
+.sidebar-left {
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+/* ── MAIN CONTENT ── */
+.main-area {
+  background: var(--bg);
+  display: grid;
+  grid-template-rows: auto;
+  gap: 1px;
+}
+
+/* ── SIDEBAR RIGHT ── */
+.sidebar-right {
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+/* ── PANEL BASE ── */
+.panel {
+  background: var(--panel);
+  padding: 16px;
+  position: relative;
+}
+
+.panel-alt { background: var(--panel2); }
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.panel-title {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-title-accent { color: var(--green); }
+.panel-title-blue { color: var(--blue); }
+.panel-title-amber { color: var(--amber); }
+
+.panel-badge {
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 2px;
+}
+
+.badge-green { background: var(--green-mid); color: var(--green); }
+.badge-blue { background: var(--blue-dim); color: var(--blue); }
+.badge-amber { background: var(--amber-dim); color: var(--amber); }
+
+/* ── IDENTITY PANEL ── */
+.identity-panel {
+  padding: 24px 16px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+}
+
+.identity-avatar {
+  width: 56px;
+  height: 56px;
+  border: 2px solid var(--green);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-ui);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--green);
+  background: var(--green-dim);
+  margin-bottom: 14px;
+  box-shadow: 0 0 20px rgba(0,255,136,0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.identity-avatar::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent 40%, rgba(0,255,136,0.1) 50%, transparent 60%);
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) rotate(0); }
+  100% { transform: translateX(100%) rotate(0); }
+}
+
+.identity-name {
+  font-family: var(--font-ui);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: 0.02em;
+  margin-bottom: 3px;
+}
+
+.identity-role {
+  font-size: 0.65rem;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+}
+
+.identity-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.id-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.62rem;
+  color: var(--muted2);
+}
+
+.id-meta-row .key { color: var(--muted); min-width: 56px; }
+.id-meta-row .val { color: var(--text); }
+
+/* ── SYSTEM STATS PANEL ── */
+.sys-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sys-stat-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sys-stat-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+.sys-stat-label .pct { color: var(--green); }
+.sys-stat-label .pct-blue { color: var(--blue); }
+.sys-stat-label .pct-amber { color: var(--amber); }
+
+.sys-bar {
+  height: 4px;
+  background: var(--border2);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.sys-bar-fill {
+  position: absolute;
+  top:0; left:0; bottom:0;
+  border-radius: 2px;
+  width: 0;
+  transition: width 1.5s cubic-bezier(0.4,0,0.2,1);
+}
+
+.fill-green { background: linear-gradient(90deg, var(--green), #00cc66); }
+.fill-blue { background: linear-gradient(90deg, var(--blue), #1a7acc); }
+.fill-amber { background: linear-gradient(90deg, var(--amber), #e8941a); }
+
+/* ── HERO PANEL ── */
+.hero-panel {
+  padding: 32px 36px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-panel::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,255,136,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-breadcrumb {
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  margin-bottom: 20px;
+}
+
+.hero-breadcrumb span { color: var(--green); }
+
+.hero-headline {
+  font-family: var(--font-ui);
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+
+.hero-headline .hl { color: var(--green); }
+
+.hero-sub {
+  font-size: 0.78rem;
+  color: var(--muted2);
+  line-height: 1.8;
+  max-width: 520px;
+  margin-bottom: 28px;
+}
+
+.hero-sub strong { color: var(--text); font-weight: 500; }
+
+.hero-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--green);
+  color: var(--bg);
+  font-family: var(--font);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 10px 22px;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border2);
+  color: var(--muted2);
+  font-family: var(--font);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 10px 22px;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.btn-ghost:hover { border-color: var(--green); color: var(--green); }
+
+/* ── KPI STRIP ── */
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--panel2);
+  border-bottom: 1px solid var(--border);
+}
+
+.kpi-cell {
+  padding: 20px 24px;
+  border-right: 1px solid var(--border);
+  transition: background 0.15s;
+}
+
+.kpi-cell:last-child { border-right: none; }
+.kpi-cell:hover { background: var(--green-dim); }
+
+.kpi-label {
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.kpi-value {
+  font-family: var(--font-ui);
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: var(--green);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.kpi-sub {
+  font-size: 0.58rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* ── CONTENT GRID (inner) ── */
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+}
+
+/* ── PROJECTS TABLE ── */
+.proj-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.proj-table tr {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.12s;
+}
+
+.proj-table tr:last-child { border-bottom: none; }
+.proj-table tr:hover { background: var(--green-dim); }
+.proj-table tr:hover .proj-status { color: var(--green); }
+
+.proj-table td {
+  padding: 12px 14px;
+  vertical-align: middle;
+}
+
+.proj-idx { font-size: 0.55rem; color: var(--muted); width: 30px; }
+
+.proj-name {
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.proj-stack-cell { font-size: 0.58rem; color: var(--muted); letter-spacing: 0.04em; }
+
+.proj-status {
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.st-active { color: var(--green); }
+.st-build { color: var(--amber); }
+.st-done { color: var(--blue); }
+
+.proj-dot {
+  display: inline-block;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.dot-green { background: var(--green); box-shadow: 0 0 4px var(--green); }
+.dot-amber { background: var(--amber); }
+.dot-blue { background: var(--blue); }
+
+/* ── SKILL BARS PANEL ── */
+.skill-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.skill-item {}
+
+.skill-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.skill-lbl {
+  font-size: 0.65rem;
+  color: var(--text);
+  letter-spacing: 0.06em;
+}
+
+.skill-pct {
+  font-size: 0.6rem;
+  color: var(--muted2);
+  font-family: var(--font);
+}
+
+.skill-track {
+  height: 3px;
+  background: var(--border2);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.skill-fill {
+  height: 100%;
+  border-radius: 1px;
+  width: 0;
+  transition: width 1.6s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ── CERT GRID ── */
+.cert-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.cert-item {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  padding: 10px 12px;
+  transition: border-color 0.2s, background 0.2s;
+  cursor: default;
+}
+
+.cert-item:hover { border-color: var(--green); background: var(--green-dim); }
+
+.cert-icon { font-size: 1.1rem; margin-bottom: 6px; }
+
+.cert-name {
+  font-size: 0.62rem;
+  color: var(--text);
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+
+.cert-org {
+  font-size: 0.55rem;
+  color: var(--muted);
+  margin-top: 2px;
+  letter-spacing: 0.06em;
+}
+
+/* ── BLOG FEED ── */
+.blog-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.blog-entry {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: padding-left 0.2s;
+}
+
+.blog-entry:last-child { border-bottom: none; }
+.blog-entry:hover { padding-left: 8px; }
+
+.blog-entry-date {
+  font-size: 0.55rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+.blog-entry-title {
+  font-size: 0.72rem;
+  color: var(--text);
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+
+.blog-entry-tag {
+  display: inline-block;
+  font-size: 0.52rem;
+  color: var(--blue);
+  border: 1px solid var(--blue-dim);
+  padding: 1px 7px;
+  letter-spacing: 0.08em;
+}
+
+/* ── ACTIVITY LOG ── */
+.activity-log {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.62rem;
+}
+
+.log-line {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.log-time {
+  color: var(--muted);
+  min-width: 42px;
+  padding-top: 1px;
+  flex-shrink: 0;
+}
+
+.log-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--border2);
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.log-dot-g { background: var(--green); box-shadow: 0 0 4px var(--green); }
+.log-dot-b { background: var(--blue); }
+.log-dot-a { background: var(--amber); }
+
+.log-msg { color: var(--muted2); line-height: 1.5; }
+.log-msg span { color: var(--text); }
+
+/* ── CONTACT PANEL ── */
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.contact-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  transition: padding-left 0.15s;
+}
+
+.contact-row:last-child { border-bottom: none; }
+.contact-row:hover { padding-left: 6px; }
+
+.cr-label { font-size: 0.65rem; color: var(--muted2); letter-spacing: 0.08em; }
+.cr-val { font-size: 0.65rem; color: var(--green); letter-spacing: 0.04em; }
+.cr-arrow { font-size: 0.7rem; color: var(--muted); }
+.contact-row:hover .cr-arrow { color: var(--green); }
+
+/* ── MINI CHART ── */
+.mini-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 48px;
+  padding-top: 8px;
+}
+
+.chart-bar {
+  flex: 1;
+  background: var(--green-mid);
+  border-radius: 2px 2px 0 0;
+  border-top: 1px solid var(--green);
+  transition: background 0.15s;
+  min-height: 4px;
+}
+
+.chart-bar:hover { background: var(--green); }
+.chart-bar.active { background: var(--green); }
+
+/* ── CLOUD MAP ── */
+.cloud-map {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.cloud-node {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  padding: 10px;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.cloud-node:hover { border-color: var(--green); background: var(--green-dim); }
+
+.cn-icon { font-size: 1.3rem; margin-bottom: 5px; }
+
+.cn-name {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.06em;
+  margin-bottom: 3px;
+}
+
+.cn-status {
+  font-size: 0.52rem;
+  color: var(--green);
+  letter-spacing: 0.1em;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1100px) {
+  .os-grid { grid-template-columns: 1fr; }
+  .sidebar-left, .sidebar-right { display: none; }
+  .kpi-strip { grid-template-columns: 1fr 1fr; }
+  .content-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .kpi-strip { grid-template-columns: 1fr 1fr; }
+  .hero-panel { padding: 24px 16px; }
+  .tb-loc { display: none; }
 }
 </style>
 </head>
 <body>
-<div class="bento">
 
-  <div class="cell c-hero">
-    <div>
-      <div class="eyebrow">FinOps Engineer · Cloud AI Architect</div>
-      <div class="hero-name">Alexis<br/>Espín<span class="v">dola</span></div>
-      <p class="hero-desc">I help organizations <strong>cut cloud costs</strong> and build <strong>AI-powered FinOps tools</strong> — across AWS, Azure &amp; GCP. 8+ years turning billing data into decisions.</p>
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="tb-logo">AE://</div>
+    <nav class="tb-nav">
+      <a href="#" class="active"><span class="icon">⬡</span> Overview</a>
+      <a href="#projects-panel"><span class="icon">◈</span> Projects</a>
+      <a href="#skills-panel"><span class="icon">◉</span> Skills</a>
+      <a href="#blog-panel"><span class="icon">▣</span> Writing</a>
+      <a href="#contact-panel"><span class="icon">⬤</span> Contact</a>
+    </nav>
+  </div>
+  <div class="topbar-right">
+    <div class="tb-status"><div class="status-led"></div> AVAILABLE</div>
+    <div class="tb-clock" id="clock">--:--:--</div>
+    <div class="tb-loc">📍 Buenos Aires, AR</div>
+  </div>
+</div>
+
+<!-- OS GRID -->
+<div class="os-grid">
+
+  <!-- ── SIDEBAR LEFT ── -->
+  <div class="sidebar-left">
+
+    <!-- Identity -->
+    <div class="identity-panel">
+      <div class="identity-avatar">AE</div>
+      <div class="identity-name">Alexis Espindola</div>
+      <div class="identity-role">FINOPS ENGINEER · CLOUD AI</div>
+      <div class="identity-meta">
+        <div class="id-meta-row"><span class="key">company</span><span class="val">Panamerican Energy</span></div>
+        <div class="id-meta-row"><span class="key">exp</span><span class="val">10+ years</span></div>
+        <div class="id-meta-row"><span class="key">focus</span><span class="val">FinOps + AI Tooling</span></div>
+        <div class="id-meta-row"><span class="key">clouds</span><span class="val">AWS · Azure · GCP</span></div>
+        <div class="id-meta-row"><span class="key">certs</span><span class="val">5+</span></div>
+      </div>
     </div>
-    <div class="hero-actions">
-      <a class="btn btn-v" href="mailto:alex@example.com">Hire me →</a>
-      <a class="btn btn-ghost" href="#posts">My work</a>
+
+    <!-- System stats = skill bars -->
+    <div class="panel" id="skills-panel">
+      <div class="panel-header">
+        <span class="panel-title"><span class="panel-title-accent">◉</span> skill.load</span>
+        <span class="panel-badge badge-green">LIVE</span>
+      </div>
+      <div class="sys-stats">
+        <div class="sys-stat-row">
+          <div class="sys-stat-label"><span>FinOps Engineering</span><span class="pct">96%</span></div>
+          <div class="sys-bar"><div class="sys-bar-fill fill-green" data-w="96"></div></div>
+        </div>
+        <div class="sys-stat-row">
+          <div class="sys-stat-label"><span>Multicloud Arch</span><span class="pct">91%</span></div>
+          <div class="sys-bar"><div class="sys-bar-fill fill-green" data-w="91"></div></div>
+        </div>
+        <div class="sys-stat-row">
+          <div class="sys-stat-label"><span>AI Integration</span><span class="pct-blue pct">84%</span></div>
+          <div class="sys-bar"><div class="sys-bar-fill fill-blue" data-w="84"></div></div>
+        </div>
+        <div class="sys-stat-row">
+          <div class="sys-stat-label"><span>Terraform / IaC</span><span class="pct">88%</span></div>
+          <div class="sys-bar"><div class="sys-bar-fill fill-green" data-w="88"></div></div>
+        </div>
+        <div class="sys-stat-row">
+          <div class="sys-stat-label"><span>Python Automation</span><span class="pct">82%</span></div>
+          <div class="sys-bar"><div class="sys-bar-fill fill-green" data-w="82"></div></div>
+        </div>
+        <div class="sys-stat-row">
+          <div class="sys-stat-label"><span>Data & Analytics</span><span class="pct-amber pct">79%</span></div>
+          <div class="sys-bar"><div class="sys-bar-fill fill-amber" data-w="79"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cloud nodes -->
+    <div class="panel panel-alt">
+      <div class="panel-header">
+        <span class="panel-title"><span class="panel-title-blue">◈</span> cloud.nodes</span>
+        <span class="panel-badge badge-blue">3 ACTIVE</span>
+      </div>
+      <div class="cloud-map">
+        <div class="cloud-node">
+          <div class="cn-icon">🟧</div>
+          <div class="cn-name">AWS</div>
+          <div class="cn-status">●&nbsp;ONLINE</div>
+        </div>
+        <div class="cloud-node">
+          <div class="cn-icon">🔵</div>
+          <div class="cn-name">Azure</div>
+          <div class="cn-status">●&nbsp;ONLINE</div>
+        </div>
+        <div class="cloud-node">
+          <div class="cn-icon">🟡</div>
+          <div class="cn-name">GCP</div>
+          <div class="cn-status">●&nbsp;ONLINE</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Certs -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title"><span class="panel-title-accent">◉</span> cert.registry</span>
+      </div>
+      <div class="cert-grid">
+        <div class="cert-item">
+          <div class="cert-icon">🏅</div>
+          <div class="cert-name">FinOps Practitioner</div>
+          <div class="cert-org">FinOps Foundation</div>
+        </div>
+        <div class="cert-item">
+          <div class="cert-icon">🟧</div>
+          <div class="cert-name">AWS Certified</div>
+          <div class="cert-org">Amazon</div>
+        </div>
+        <div class="cert-item">
+          <div class="cert-icon">🔵</div>
+          <div class="cert-name">Azure Certified</div>
+          <div class="cert-org">Microsoft</div>
+        </div>
+        <div class="cert-item">
+          <div class="cert-icon">🟣</div>
+          <div class="cert-name">Terraform Assoc.</div>
+          <div class="cert-org">HashiCorp</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── MAIN AREA ── -->
+  <div class="main-area">
+
+    <!-- Hero -->
+    <div class="hero-panel">
+      <div class="hero-breadcrumb">SYS://espindola.dev / <span>home</span></div>
+      <h1 class="hero-headline">
+        FinOps Engineer<br/>
+        <span class="hl">+</span> Cloud AI Architect
+      </h1>
+      <p class="hero-sub">
+        I optimize <strong>cloud costs</strong> and build <strong>AI-powered FinOps tools</strong> —
+        turning complex multicloud billing data into intelligence that saves real money.
+        8+ years across AWS, Azure &amp; GCP.
+      </p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#projects-panel">→ View Projects</a>
+        <a class="btn-ghost" href="#contact-panel">Get in touch</a>
+      </div>
+    </div>
+
+    <!-- KPI Strip -->
+    <div class="kpi-strip">
+      <div class="kpi-cell">
+        <div class="kpi-label">// years active</div>
+        <div class="kpi-value" data-target="8">0</div>
+        <div class="kpi-sub">cloud infrastructure</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">// cloud platforms</div>
+        <div class="kpi-value" style="color:var(--blue)" data-target="3">0</div>
+        <div class="kpi-sub">AWS · Azure · GCP</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">// certifications</div>
+        <div class="kpi-value" style="color:var(--amber)" data-target="5">0</div>
+        <div class="kpi-sub">& counting</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-label">// projects built</div>
+        <div class="kpi-value" data-target="4">0</div>
+        <div class="kpi-sub">AI-powered tools</div>
+      </div>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="content-grid">
+
+      <!-- Projects -->
+      <div class="panel" id="projects-panel">
+        <div class="panel-header">
+          <span class="panel-title"><span class="panel-title-accent">◈</span> project.registry</span>
+          <span class="panel-badge badge-green">4 ACTIVE</span>
+        </div>
+        <table class="proj-table">
+          <tbody>
+            <tr>
+              <td class="proj-idx">01</td>
+              <td>
+                <div class="proj-name">FinOps Navigator</div>
+                <div class="proj-stack-cell">Azure SWA · Functions · Cosmos DB · OpenAI</div>
+              </td>
+              <td class="proj-status st-active"><span class="proj-dot dot-green"></span>BUILDING</td>
+            </tr>
+            <tr>
+              <td class="proj-idx">02</td>
+              <td>
+                <div class="proj-name">Conversational Billing</div>
+                <div class="proj-stack-cell">AWS CUR · Athena · Azure OpenAI · Teams</div>
+              </td>
+              <td class="proj-status st-done"><span class="proj-dot dot-blue"></span>DEPLOYED</td>
+            </tr>
+            <tr>
+              <td class="proj-idx">03</td>
+              <td>
+                <div class="proj-name">Cloud Cost Monitor</div>
+                <div class="proj-stack-cell">Python · pystray · boto3 · Azure Cost API</div>
+              </td>
+              <td class="proj-status st-done"><span class="proj-dot dot-blue"></span>DEPLOYED</td>
+            </tr>
+            <tr>
+              <td class="proj-idx">04</td>
+              <td>
+                <div class="proj-name">Tag Compliance Auditor</div>
+                <div class="proj-stack-cell">Python · boto3 · AWS CloudShell</div>
+              </td>
+              <td class="proj-status st-done"><span class="proj-dot dot-blue"></span>DEPLOYED</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Activity log -->
+      <div class="panel panel-alt">
+        <div class="panel-header">
+          <span class="panel-title"><span class="panel-title-blue">▣</span> activity.log</span>
+          <span class="panel-badge badge-blue">LIVE</span>
+        </div>
+        <div class="activity-log">
+          <div class="log-line">
+            <span class="log-time">NOW</span>
+            <div class="log-dot log-dot-g"></div>
+            <span class="log-msg">Deploying <span>FinOps Navigator</span> Cosmos DB container</span>
+          </div>
+          <div class="log-line">
+            <span class="log-time">TODAY</span>
+            <div class="log-dot log-dot-g"></div>
+            <span class="log-msg">Building <span>tag compliance</span> audit module w/ boto3</span>
+          </div>
+          <div class="log-line">
+            <span class="log-time">WEEK</span>
+            <div class="log-dot log-dot-b"></div>
+            <span class="log-msg">Completed <span>FOCP exam</span> study — all 13 modules</span>
+          </div>
+          <div class="log-line">
+            <span class="log-time">WEEK</span>
+            <div class="log-dot log-dot-b"></div>
+            <span class="log-msg">Architected <span>Azure DevOps CI/CD</span> for Navigator</span>
+          </div>
+          <div class="log-line">
+            <span class="log-time">MTH</span>
+            <div class="log-dot log-dot-a"></div>
+            <span class="log-msg">Shipped <span>real-time cost monitor</span> system tray app</span>
+          </div>
+          <div class="log-line">
+            <span class="log-time">MTH</span>
+            <div class="log-dot log-dot-a"></div>
+            <span class="log-msg">Integrated <span>Azure OpenAI</span> billing query in Teams</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cost savings mini chart -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title"><span class="panel-title-green">◉</span> cost.impact</span>
+          <span class="panel-badge badge-green">OPTIMIZED</span>
+        </div>
+        <div style="font-size:0.6rem; color:var(--muted); margin-bottom:12px; letter-spacing:0.08em;">CLOUD SPEND REDUCTION · RELATIVE INDEX</div>
+        <div class="mini-chart">
+          <div class="chart-bar" style="height:30%" title="Q1 baseline"></div>
+          <div class="chart-bar" style="height:38%"></div>
+          <div class="chart-bar" style="height:28%"></div>
+          <div class="chart-bar" style="height:45%"></div>
+          <div class="chart-bar" style="height:35%"></div>
+          <div class="chart-bar" style="height:52%"></div>
+          <div class="chart-bar" style="height:40%"></div>
+          <div class="chart-bar" style="height:62%"></div>
+          <div class="chart-bar" style="height:55%"></div>
+          <div class="chart-bar" style="height:70%"></div>
+          <div class="chart-bar" style="height:65%"></div>
+          <div class="chart-bar active" style="height:85%"></div>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:0.55rem; color:var(--muted); margin-top:6px; letter-spacing:0.06em;">
+          <span>JAN</span><span>MAR</span><span>MAY</span><span>JUL</span><span>SEP</span><span>NOW</span>
+        </div>
+        <div style="margin-top:16px; padding-top:12px; border-top:1px solid var(--border);">
+          <div style="font-family:var(--font-ui); font-size:1.5rem; font-weight:800; color:var(--green);">↑ 85%</div>
+          <div style="font-size:0.58rem; color:var(--muted); margin-top:2px;">cumulative savings vs baseline through tagging + governance</div>
+        </div>
+      </div>
+
+      <!-- Blog feed -->
+      <div class="panel panel-alt" id="blog-panel">
+        <div class="panel-header">
+          <span class="panel-title"><span class="panel-title-amber">▣</span> writing.queue</span>
+          <span class="panel-badge badge-amber">DRAFTING</span>
+        </div>
+        <div class="blog-feed">
+          <div class="blog-entry">
+            <div class="blog-entry-date">// UPCOMING · Q2 2025</div>
+            <div class="blog-entry-title">AI-Powered FinOps: Beyond Dashboards</div>
+            <span class="blog-entry-tag">FinOps · AI</span>
+          </div>
+          <div class="blog-entry">
+            <div class="blog-entry-date">// UPCOMING · Q2 2025</div>
+            <div class="blog-entry-title">Multicloud Tagging Strategy at Enterprise Scale</div>
+            <span class="blog-entry-tag">Governance · AWS</span>
+          </div>
+          <div class="blog-entry">
+            <div class="blog-entry-date">// UPCOMING · Q3 2025</div>
+            <div class="blog-entry-title">Conversational Cost Intelligence with Athena + OpenAI</div>
+            <span class="blog-entry-tag">AWS · Azure OpenAI</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <div class="cell c-avail"><div class="avail-dot"></div><div class="avail-text">Available</div></div>
-  <div class="cell stat-cell"><div class="stat-num">8+</div><div class="stat-lbl">years cloud</div></div>
-  <div class="cell stat-cell"><div class="stat-num c">5+</div><div class="stat-lbl">certifications</div></div>
-  <div class="cell c-loc"><div class="loc-flag">🇦🇷</div><div class="loc-text">Buenos<br/>Aires</div></div>
+  <!-- ── SIDEBAR RIGHT ── -->
+  <div class="sidebar-right">
 
-  <div class="cell c-clouds">
-    <div class="cell-label">// cloud coverage</div>
-    <div class="cloud-items">
-      <div class="cloud-row"><div class="cloud-icon">🟧</div><div class="cloud-info"><div class="cloud-name">Amazon AWS</div><div class="cloud-bar"><div class="cloud-fill fv" data-w="92"></div></div></div><div class="cloud-pct">92%</div></div>
-      <div class="cloud-row"><div class="cloud-icon">🔵</div><div class="cloud-info"><div class="cloud-name">Microsoft Azure</div><div class="cloud-bar"><div class="cloud-fill fc" data-w="88"></div></div></div><div class="cloud-pct">88%</div></div>
-      <div class="cloud-row"><div class="cloud-icon">🟡</div><div class="cloud-info"><div class="cloud-name">Google Cloud</div><div class="cloud-bar"><div class="cloud-fill fy" data-w="72"></div></div></div><div class="cloud-pct">72%</div></div>
+    <!-- About snippet -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title"><span class="panel-title-accent">◉</span> about.md</span>
+      </div>
+      <div style="font-size:0.67rem; color:var(--muted2); line-height:1.8;">
+        FinOps Engineer with <span style="color:var(--text)">8+ years</span> in cloud infrastructure and governance.<br/><br/>
+        I work at <span style="color:var(--text)">PAE / SomosPAE</span> in Argentina, designing multicloud cost optimization frameworks and building <span style="color:var(--green)">AI-powered tools</span> that make cloud spending transparent and predictable.<br/><br/>
+        Focused on the next generation of FinOps: where you <span style="color:var(--text)">talk to your cloud bill</span>, and it talks back with insight.
+      </div>
     </div>
+
+    <!-- Stack -->
+    <div class="panel panel-alt">
+      <div class="panel-header">
+        <span class="panel-title"><span class="panel-title-blue">◈</span> tech.stack</span>
+      </div>
+      <div class="skill-list">
+        <div class="skill-item">
+          <div class="skill-top"><span class="skill-lbl">AWS (Cost Explorer · CUR · Athena)</span><span class="skill-pct">95%</span></div>
+          <div class="skill-track"><div class="skill-fill fill-green" data-w="95"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-top"><span class="skill-lbl">Azure (OpenAI · Functions · Cosmos)</span><span class="skill-pct">90%</span></div>
+          <div class="skill-track"><div class="skill-fill fill-blue" data-w="90"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-top"><span class="skill-lbl">Terraform / IaC</span><span class="skill-pct">88%</span></div>
+          <div class="skill-track"><div class="skill-fill fill-green" data-w="88"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-top"><span class="skill-lbl">Python · boto3 · Azure SDK</span><span class="skill-pct">83%</span></div>
+          <div class="skill-track"><div class="skill-fill fill-amber" data-w="83"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-top"><span class="skill-lbl">Azure DevOps CI/CD</span><span class="skill-pct">85%</span></div>
+          <div class="skill-track"><div class="skill-fill fill-blue" data-w="85"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="panel" id="contact-panel">
+      <div class="panel-header">
+        <span class="panel-title"><span class="panel-title-accent">⬤</span> contact.init</span>
+        <span class="panel-badge badge-green">OPEN</span>
+      </div>
+      <div class="contact-links">
+        <a class="contact-row" href="mailto:alex@example.com">
+          <span class="cr-label">email</span>
+          <span class="cr-val">aespindola09@gmail.com</span>
+          <span class="cr-arrow">→</span>
+        </a>
+        <a class="contact-row" href="https://www.linkedin.com/in/aespindola09/" target="_blank">
+          <span class="cr-label">linkedin</span>
+          <span class="cr-val">/in/aespindola09</span>
+          <span class="cr-arrow">→</span>
+        </a>
+        <a class="contact-row" href="https://github.com/aespindola09" target="_blank">
+          <span class="cr-label">github</span>
+          <span class="cr-val">/aespindola09</span>
+          <span class="cr-arrow">→</span>
+        </a>
+        <div class="contact-row" style="cursor:default;">
+          <span class="cr-label">location</span>
+          <span style="font-size:0.62rem; color:var(--muted2);">Buenos Aires 🇦🇷</span>
+          <span class="cr-arrow" style="opacity:0">→</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Availability -->
+    <div class="panel panel-alt">
+      <div class="panel-header">
+        <span class="panel-title"><span class="panel-title-accent">◉</span> status.exe</span>
+        <span class="panel-badge badge-green">AVAILABLE</span>
+      </div>
+      <div style="font-size:0.6rem; color:var(--muted2); line-height:1.8;">
+        <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+          <span style="color:var(--green);">✓</span>
+          <span>Senior FinOps roles</span>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+          <span style="color:var(--green);">✓</span>
+          <span>Cloud consulting (AWS · Azure)</span>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+          <span style="color:var(--green);">✓</span>
+          <span>AI + FinOps tooling projects</span>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <span style="color:var(--green);">✓</span>
+          <span>Remote · LATAM / Global</span>
+        </div>
+      </div>
+      <a class="btn-primary" href="mailto:alex@example.com" style="display:block; text-align:center; margin-top:16px; font-size:0.65rem;">
+        → Send Message
+      </a>
+    </div>
+
   </div>
-
-  <div class="cell c-proj">
-    <div>
-      <div class="proj-header"><div class="proj-badge">// featured project</div><div class="proj-status">Building</div></div>
-      <div class="proj-title"><em>FinOps</em> Navigator</div>
-      <div class="proj-desc">Cloud cost optimization platform — budgets, showback/chargeback, tag governance and AI-powered insights.</div>
-    </div>
-    <div class="proj-tags">
-      <span class="proj-tag">Azure SWA</span><span class="proj-tag">Functions</span><span class="proj-tag">Cosmos DB</span><span class="proj-tag">Azure OpenAI</span><span class="proj-tag">DevOps CI/CD</span>
-    </div>
-  </div>
-
-  <div class="cell c-stack">
-    <span class="stack-label">stack</span>
-    <span class="stk hl">Python</span><span class="stk hl">boto3</span><span class="stk hl">Terraform</span>
-    <span class="stk">Azure OpenAI</span><span class="stk">Cosmos DB</span><span class="stk">Athena</span><span class="stk">Claude API</span><span class="stk">Azure DevOps</span>
-  </div>
-
-  <div class="cell c-contact">
-    <a class="contact-link" href="mailto:alex@example.com" title="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
-    <a class="contact-link" href="https://linkedin.com/in/alexisespindola" target="_blank" title="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
-    <a class="contact-link" href="https://github.com/alexisespindola" target="_blank" title="GitHub"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
-    <a class="btn btn-v" href="mailto:alex@example.com" style="margin-left:4px;font-size:.7rem;padding:8px 14px;">Let's talk</a>
-  </div>
-
-  <div class="cell c-skills">
-    <div class="cell-label">// skill matrix</div>
-    <div class="skill-list">
-      <div><div class="skill-top"><span class="skill-name">FinOps Engineering</span><span class="skill-pct">96%</span></div><div class="skill-track"><div class="skill-fill fv" data-w="96"></div></div></div>
-      <div><div class="skill-top"><span class="skill-name">Multicloud Architecture</span><span class="skill-pct">91%</span></div><div class="skill-track"><div class="skill-fill fv" data-w="91"></div></div></div>
-      <div><div class="skill-top"><span class="skill-name">AI Integration</span><span class="skill-pct">84%</span></div><div class="skill-track"><div class="skill-fill fc" data-w="84"></div></div></div>
-      <div><div class="skill-top"><span class="skill-name">Terraform / IaC</span><span class="skill-pct">88%</span></div><div class="skill-track"><div class="skill-fill fy" data-w="88"></div></div></div>
-      <div><div class="skill-top"><span class="skill-name">Python · boto3 · Azure SDK</span><span class="skill-pct">82%</span></div><div class="skill-track"><div class="skill-fill fv" data-w="82"></div></div></div>
-    </div>
-  </div>
-
-  <div class="cell c-about">
-    <div>
-      <div class="cell-label">// about.md</div>
-      <div class="about-quote">At the intersection of <em>cloud economics</em> and artificial intelligence.</div>
-      <div class="about-body">FinOps Engineer with 8+ years in cloud infrastructure and governance. I design multicloud cost optimization strategies and build AI-powered tools that make cloud spending transparent, predictable, and optimized.</div>
-    </div>
-    <div class="about-facts">
-      <div><div class="af-val" style="color:var(--violet);text-shadow:0 0 10px rgba(123,95,255,.4)">AWS</div><div class="af-lbl">Certified</div></div>
-      <div><div class="af-val" style="color:var(--cyan);text-shadow:0 0 10px rgba(0,229,255,.4)">Azure</div><div class="af-lbl">Certified</div></div>
-      <div><div class="af-val" style="color:var(--yellow)">FOCP</div><div class="af-lbl">FinOps Fdn</div></div>
-      <div><div class="af-val" style="color:#555">TF</div><div class="af-lbl">HashiCorp</div></div>
-    </div>
-  </div>
-
-  <div class="cell c-blog">
-    <div class="cell-label">// latest posts</div>
-    <div id="blog-mini"></div>
-    <div class="blog-footer">
-      <span class="bf-lbl">posts.json</span>
-      <a class="bf-all" href="#posts">ver todo ↓</a>
-    </div>
-  </div>
-
-  <div class="cell c-posts" id="posts">
-    <div class="posts-header">
-      <div class="posts-title">// blog &amp; shared content</div>
-      <div class="posts-status" id="ps">cargando...</div>
-    </div>
-    <div class="posts-grid" id="posts-grid">
-      <div class="posts-empty"><div class="pe-icon">◌</div><div class="pe-text">Cargando posts.json...</div></div>
-    </div>
-  </div>
-
 </div>
 
 <script>
-/* barras animadas */
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (!e.isIntersecting) return;
-    e.target.querySelectorAll('[data-w]').forEach((el,i) => setTimeout(() => el.style.width = el.dataset.w+'%', i*80+150));
-    io.unobserve(e.target);
-  });
-},{threshold:.1});
-document.querySelectorAll('.cell').forEach(c => io.observe(c));
-
-/* tipos de post → clase CSS */
-const typeClass = t => 'pt-'+(t||'note');
-
-/* render post card */
-const card = p => `
-  <a class="post-card" ${p.url?`href="${p.url}" target="_blank"`:'href="#"'}>
-    <div class="post-type ${typeClass(p.type)}">${p.type||'note'}</div>
-    <div class="post-title">${p.title}</div>
-    <div class="post-body">${p.desc||''}</div>
-    <div class="post-meta">
-      <span class="post-date">${p.date||''}</span>
-      <span class="post-lbl">${p.url?'→ ver':'· draft'}</span>
-    </div>
-  </a>`;
-
-/* carga posts.json */
-async function loadPosts() {
-  const grid = document.getElementById('posts-grid');
-  const ps   = document.getElementById('ps');
-  const mini = document.getElementById('blog-mini');
-
-  try {
-    const res   = await fetch('posts.json');
-    if (!res.ok) throw new Error();
-    const posts = await res.json();
-
-    ps.textContent = posts.length + ' post' + (posts.length!==1?'s':'');
-    ps.style.color = 'var(--violet)';
-
-    if (!posts.length) {
-      grid.innerHTML = `<div class="posts-empty"><div class="pe-icon">◌</div><div class="pe-text">posts.json está vacío.<br/>Agregá entradas para que aparezcan acá.</div></div>`;
-    } else {
-      grid.innerHTML = posts.map(card).join('');
-    }
-
-    /* mini blog: top 3 */
-    mini.innerHTML = posts.slice(0,3).map((p,i) => `
-      <div class="bme">
-        <div class="bme-i">0${i+1}</div>
-        <div class="bme-t">${p.title}</div>
-        <div class="bme-a">→</div>
-      </div>`).join('') || '<div class="bme"><div class="bme-t" style="color:var(--muted2)">Sin posts todavía</div></div>';
-
-  } catch {
-    ps.textContent = 'posts.json not found';
-    grid.innerHTML = `
-      <div class="posts-empty">
-        <div class="pe-icon">◌</div>
-        <div class="pe-text">No se encontró posts.json en la raíz del repo.<br/>Creá el archivo para empezar a publicar.</div>
-        <div class="pe-code">posts.json → ver README para el formato</div>
-      </div>`;
-    mini.innerHTML = ['AI-Powered FinOps: Beyond Dashboards','Multicloud Tagging at Enterprise Scale','Conversational Cost Intelligence con Athena'].map((t,i)=>`
-      <div class="bme"><div class="bme-i">0${i+1}</div><div class="bme-t">${t}</div><div class="bme-a">→</div></div>`).join('');
+  // Live clock
+  function updateClock() {
+    const now = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    document.getElementById('clock').textContent =
+      `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
   }
-}
+  updateClock();
+  setInterval(updateClock, 1000);
 
-loadPosts();
+  // Animate KPI numbers
+  function animateNum(el) {
+    const target = parseInt(el.dataset.target);
+    const dur = 1400;
+    const start = performance.now();
+    function step(now) {
+      const t = Math.min((now - start) / dur, 1);
+      const ease = 1 - Math.pow(1 - t, 3);
+      el.textContent = Math.round(ease * target) + (target >= 8 ? '+' : '');
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // Animate bars
+  function animateBars(container) {
+    container.querySelectorAll('[data-w]').forEach((el, i) => {
+      setTimeout(() => {
+        el.style.width = el.dataset.w + '%';
+      }, i * 80);
+    });
+  }
+
+  // IntersectionObserver
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      // KPI numbers
+      el.querySelectorAll('[data-target]').forEach(animateNum);
+      // Skill bars
+      animateBars(el);
+      io.unobserve(el);
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.panel, .kpi-strip').forEach(el => io.observe(el));
 </script>
 </body>
 </html>
